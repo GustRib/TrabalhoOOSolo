@@ -5,17 +5,17 @@ import java.util.List;
 public class Repositorio<Generic> implements Gerenciavel<Generic> {
     private List<Generic> itens = new ArrayList<>();
 
-    @Override
+    @Override // polimorfismo
     public void adicionar(Generic Generic) {
         itens.add(Generic);
     }
 
-    @Override
+    @Override // polimorfismo
     public void remover(Generic Generic) {
         itens.remove(Generic);
     }
 
-    @Override
+    @Override // polimorfismo
     public List<Generic> listarTodos() {
         return itens;
     }
