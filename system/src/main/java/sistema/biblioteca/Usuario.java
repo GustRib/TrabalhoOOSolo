@@ -68,6 +68,7 @@ public class Usuario extends Pessoa implements Serializable {
 
     @Override // polimorfismo
     public String getIdentificacao() {
+        System.out.println("O cpf de " + this.nome + " eh: " + this.cpf);
         return cpf;
     }
 }
