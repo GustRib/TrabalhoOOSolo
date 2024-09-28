@@ -13,13 +13,33 @@ public class Main {
         telaLoginCadastro();
     }
         public static void telaLoginCadastro() {
-            JFrame frame = new JFrame("Login ou Cadastro");
+            JFrame frame = new JFrame("Sistema Biblioteca OO");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 300);
             frame.setLayout(new FlowLayout());
 
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+
+        JLabel lblTitulo = new JLabel("Sistema Biblioteca OO", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Serif", Font.BOLD, 24));
+        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+        panel.add(lblTitulo);
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+
             JButton btnLogin = new JButton("Login");
             JButton btnCadastro = new JButton("Cadastro");
+
+            JButton[] buttons = {btnLogin, btnCadastro};
+            for (JButton button : buttons) {
+                button.setPreferredSize(new Dimension(200, 50));
+                button.setFont(new Font("Arial", Font.BOLD, 16));
+                button.setForeground(Color.BLACK);
+                frame.add(button);
+            }
 
             frame.add(btnLogin);
             frame.add(btnCadastro);
