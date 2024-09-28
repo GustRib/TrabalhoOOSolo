@@ -67,4 +67,31 @@ public class Biblioteca {
         }
         return null;
     }
+
+    public Usuario buscarUsuarioPorNome(String nome) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getNome().equalsIgnoreCase(nome)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+    public Usuario buscarUsuarioPorLivro(Livro livro) {
+        for (Emprestimo emprestimo : emprestimos) {
+            if (emprestimo.getLivro().equals(livro)) {
+                return emprestimo.getUsuario();
+            }
+        }
+        return null;
+    }
+
+    public Usuario buscarUsuarioPorEmailSenha(String email, String senha) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
+                return usuario; // Se encontrar o usuário, retorna-o
+            }
+        }
+        return null; // Se não encontrar, retorna null
+    }
 }
+

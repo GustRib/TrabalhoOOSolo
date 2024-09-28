@@ -20,11 +20,11 @@ public class Usuario extends Pessoa implements Serializable {
         this.senha = senha;
     }
 
-    private boolean validarNome(String nome) {
+    protected static boolean validarNome(String nome) {
         return Pattern.matches("[a-zA-Z\\s]+", nome);
     }
 
-    private boolean validarCPF(String cpf) {
+    protected static boolean validarCPF(String cpf) {
         String regex = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$|^\\d{11}$";
         if (!Pattern.matches(regex, cpf)) {
             return false;
@@ -34,6 +34,11 @@ public class Usuario extends Pessoa implements Serializable {
             return false;
         }
         return true;
+    }
+
+    protected static boolean validarEmail(String email) {
+        String regex = ("^[\\w._%+-]+@[\\w.-]+\\.com$");
+        return email != null && Pattern.matches(regex, email);
     }
 
     public String getCpf() {
