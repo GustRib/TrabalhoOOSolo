@@ -72,6 +72,14 @@ public class Usuario extends Pessoa implements Serializable {
     }
 
     @Override // polimorfismo
+    public void setNome(String nome) {
+        if (!validarNome(nome)) {
+            throw new IllegalArgumentException("Nome invalido.");
+        }
+        this.nome = nome;
+    }
+
+    @Override // polimorfismo
     public String getIdentificacao() {
         System.out.println("O cpf de " + this.nome + " eh: " + this.cpf);
         return cpf;

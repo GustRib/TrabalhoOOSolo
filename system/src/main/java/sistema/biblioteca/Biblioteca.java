@@ -88,10 +88,10 @@ public class Biblioteca {
     public Usuario buscarUsuarioPorEmailSenha(String email, String senha) {
         for (Usuario usuario : usuarios) {
             if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
-                return usuario; // Se encontrar o usuário, retorna-o
+                return usuario;
             }
         }
-        return null; // Se não encontrar, retorna null
+        return null;
     }
 }
 

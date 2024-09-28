@@ -26,70 +26,74 @@ public class Main {
         lblTitulo.setFont(new Font("Serif", Font.BOLD, 24));
         lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-
         panel.add(lblTitulo);
         panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-            JButton btnLogin = new JButton("Login");
-            JButton btnCadastro = new JButton("Cadastro");
+        JButton btnLogin = new JButton("Login");
+        JButton btnCadastro = new JButton("Cadastro");
 
-            JButton[] buttons = {btnLogin, btnCadastro};
-            for (JButton button : buttons) {
-                button.setPreferredSize(new Dimension(200, 50));
-                button.setFont(new Font("Arial", Font.BOLD, 16));
-                button.setForeground(Color.BLACK);
-                frame.add(button);
+        JButton[] buttons = {btnLogin, btnCadastro};
+        for (JButton button : buttons) {
+            button.setPreferredSize(new Dimension(200, 50));
+            button.setFont(new Font("Arial", Font.BOLD, 16));
+            button.setForeground(Color.BLACK);
+            frame.add(button);
+        }
+
+        frame.add(btnLogin);
+        frame.add(btnCadastro);
+
+        btnCadastro.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String nome = JOptionPane.showInputDialog("Nome:");
+                if (nome == null || !Usuario.validarNome(nome)) {
+                    JOptionPane.showMessageDialog(null, "Nome invalido. Insira um nome valido.", "Erro de Validacao", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String cpf = JOptionPane.showInputDialog("CPF:");
+                if (cpf == null || !Usuario.validarCPF(cpf)) {
+                    JOptionPane.showMessageDialog(null, "CPF invalido. Insira um CPF no formato correto.", "Erro de Validacao", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String email = JOptionPane.showInputDialog("Email:");
+                if (email == null || !Usuario.validarEmail(email)) {
+                    JOptionPane.showMessageDialog(null, "Email invalido. Insira um email no formato correto (exemplo@dominio.com).", "Erro de Validacao", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String senha = JOptionPane.showInputDialog("Senha:");
+                String[] opcoes = {"Administrador", "Estudante"};
+                String tipo = (String) JOptionPane.showInputDialog(null, "Tipo de Conta", "Cadastro", JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[1]);
+                        
+                Usuario novoUsuario;
+                if (tipo.equals("Administrador")) {
+                    novoUsuario = new Administrador(nome, cpf, email, senha, "Administrador", true, true);
+                } else {
+                    novoUsuario = new Estudante(nome, cpf, email, senha, "Estudante");
+                }
+                biblioteca.adicionarUsuario(novoUsuario);
+                JOptionPane.showMessageDialog(null, "Conta criada com sucesso!");
             }
-
-            frame.add(btnLogin);
-            frame.add(btnCadastro);
-
-            btnCadastro.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String nome = JOptionPane.showInputDialog("Nome:");
-                    String cpf = JOptionPane.showInputDialog("CPF:");
-                    String email = JOptionPane.showInputDialog("Email:");
-                    if (email == null || !Usuario.validarEmail(email)) {
-                        JOptionPane.showMessageDialog(null, "Email invalido. Insira um email no formato correto (exemplo@dominio.com).", "Erro de Validacao", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    String senha = JOptionPane.showInputDialog("Senha:");
-                    String[] opcoes = {"Administrador", "Estudante"};
-                    String tipo = (String) JOptionPane.showInputDialog(null, "Tipo de Conta", "Cadastro",
-                            JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[1]);
-
-                    Usuario novoUsuario;
-                    if (tipo.equals("Administrador")) {
-                        novoUsuario = new Administrador(nome, cpf, email, senha, "Administrador", true, true);
-                    } else {
-                        novoUsuario = new Estudante(nome, cpf, email, senha, "Estudante");
-                    }
-
-                    biblioteca.adicionarUsuario(novoUsuario);
-                    JOptionPane.showMessageDialog(null, "Conta criada com sucesso!");
+        });
+    
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String email = JOptionPane.showInputDialog("Email:");
+                String senha = JOptionPane.showInputDialog("Senha:");
+    
+                Usuario usuario = biblioteca.buscarUsuarioPorEmailSenha(email, senha);
+                if (usuario == null) {
+                    JOptionPane.showMessageDialog(null, "Credenciais invalidas.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    usuarioLogado = usuario;
+                    JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
+                    frame.dispose();
+                    telaPrincipal();
                 }
-            });
-    
-            btnLogin.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String email = JOptionPane.showInputDialog("Email:");
-                    String senha = JOptionPane.showInputDialog("Senha:");
-    
-                    Usuario usuario = biblioteca.buscarUsuarioPorEmailSenha(email, senha);
-                    if (usuario == null) {
-                        JOptionPane.showMessageDialog(null, "Credenciais invalidas.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        usuarioLogado = usuario;
-                        JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
-    
-                        frame.dispose();
-                        telaPrincipal();
-                    }
-                }
-            });
-    
+            }
+        });
             frame.setVisible(true);
         }
+
         public static void telaPrincipal() {
         JFrame frame = new JFrame("Sistema de Biblioteca");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,7 +108,6 @@ public class Main {
         JButton btnDevolverLivro = new JButton("Devolver Livro");
         JButton btnRemoverUsuario = new JButton("Remover Usuario");
         JButton btnLogoff = new JButton("Logoff");
-
 
         JButton[] buttons = {btnAdicionarLivro, btnListarLivros, btnAdicionarUsuario, btnListarUsuarios, btnEmprestarLivro, btnDevolverLivro, btnRemoverUsuario, btnLogoff};
         for (JButton button : buttons) {
@@ -129,8 +132,6 @@ public class Main {
         frame.add(btnDevolverLivro);
         frame.add(btnRemoverUsuario);
         frame.add(btnLogoff);
-
-
         
         btnLogoff.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -146,21 +147,18 @@ public class Main {
         btnRemoverUsuario.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String nomeUsuario = JOptionPane.showInputDialog(frame, "Nome do usuario a ser removido:", "Remover Usuario", JOptionPane.PLAIN_MESSAGE);
-                
                 if (nomeUsuario == null || nomeUsuario.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-        
+
                 Usuario usuario = biblioteca.buscarUsuarioPorNome(nomeUsuario);
-        
                 if (usuario == null) {
                     JOptionPane.showMessageDialog(frame, "Usuario nao encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
                 } else {
                     int confirm = JOptionPane.showConfirmDialog(frame, 
                         "Tem certeza que deseja remover o usuario '" + usuario.getNome() + "' permanentemente?", 
                         "Confirmar Exclusao", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                    
                     if (confirm == JOptionPane.YES_OPTION) {
                         biblioteca.removerUsuario(usuario);
                         JOptionPane.showMessageDialog(frame, "Usuario removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -178,16 +176,19 @@ public class Main {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 String autor = JOptionPane.showInputDialog(frame, "Autor do Livro:", "Adicionar Livro", JOptionPane.PLAIN_MESSAGE);
                 if (autor == null || autor.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 String isbn = JOptionPane.showInputDialog(frame, "ISBN do Livro:", "Adicionar Livro", JOptionPane.PLAIN_MESSAGE);
                 if (isbn == null || isbn.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 Livro livro = new Livro(titulo, autor, isbn);
                 biblioteca.adicionarLivro(livro);
                 JOptionPane.showMessageDialog(frame, "Livro adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -237,7 +238,6 @@ public class Main {
             }
         });
 
-
         btnListarUsuarios.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 StringBuilder usuariosListados = new StringBuilder("Usuarios cadastrados:\n");
@@ -248,7 +248,6 @@ public class Main {
                     }
                     usuariosListados.append("\n");
                 }
-
                 JOptionPane.showMessageDialog(frame, usuariosListados.toString(), "Listar Usuarios", JOptionPane.INFORMATION_MESSAGE);
             }
         });
@@ -260,11 +259,13 @@ public class Main {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 String nomeUsuario = JOptionPane.showInputDialog(frame, "Nome do usuario que esta emprestando:", "Emprestar Livro", JOptionPane.PLAIN_MESSAGE);
                 if (nomeUsuario == null || nomeUsuario.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 Livro livro = biblioteca.buscarLivroPorTitulo(tituloLivro);
                 Usuario usuario = biblioteca.buscarUsuarioPorNome(nomeUsuario);
                 if (usuario == null) {
@@ -287,11 +288,13 @@ public class Main {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 String nomeUsuario = JOptionPane.showInputDialog(frame, "Nome do usuario que esta devolvendo:", "Devolver Livro", JOptionPane.PLAIN_MESSAGE);
                 if (nomeUsuario == null || nomeUsuario.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Operacao cancelada.", "Erro", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 Livro livro = biblioteca.buscarLivroPorTitulo(tituloLivro);
                 Usuario usuario = biblioteca.buscarUsuarioPorNome(nomeUsuario);
                 if (usuario == null) {
